@@ -5,9 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = __importDefault(require("./config/config"));
-const user = 'cafezen_admin';
-const password = 'Daryin231508';
-const bdatos = 'WorkManager';
 //setting options DB
 const DBOption = {
     autoIndex: true,

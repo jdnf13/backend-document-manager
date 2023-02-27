@@ -13,8 +13,8 @@ const DBOption = {
     autoIndex: true,
     maxPoolSize: 100,
     serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-    //family: 4 // Use IPv4, skip trying IPv6
+    socketTimeoutMS: 45000,
+    family: 4 // Use IPv4, skip trying IPv6
 };
 mongoose_1.default.set('strictQuery', false);
 mongoose_1.default.connect(config_1.default.DB.MONGO_URI, DBOption);

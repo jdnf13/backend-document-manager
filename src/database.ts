@@ -1,10 +1,6 @@
 import mongoose, { ConnectOptions } from "mongoose";
 import config from "./config/config";
 
-const user = 'cafezen_admin';
-const password = 'Daryin231508';
-const bdatos = 'WorkManager';
-
 //setting options DB
 const DBOption: ConnectOptions = {
     autoIndex: true, // Don't build indexes

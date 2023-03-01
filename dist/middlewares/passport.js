@@ -22,7 +22,7 @@ const options = {
 exports.default = new passport_jwt_1.Strategy(options, (payload, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_1.default.findOne(payload.email);
-        if (user)
+        if (user && user.state && user.state === 1)
             return done(null, user);
         return done(null, false);
     }

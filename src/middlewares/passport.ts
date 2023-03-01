@@ -10,7 +10,7 @@ const options: StrategyOptions = {
 export default new Strategy(options, async (payload, done) => {
     try {
         const user = await User.findOne(payload.email);
-        if (user)
+        if (user && user.state && user.state === 1)
             return done(null, user);
 
         return done(null, false);

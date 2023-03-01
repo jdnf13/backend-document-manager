@@ -21,12 +21,12 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty())
         return res.status(400).json({ errors: errors.array() });
-    const { email, password, name, lastname, phone, country, geographicZone, city, address, company } = req.body;
+    const { email, password, name, lastname, phone, country, geographicZone, city, address, company, state } = req.body;
     try {
         const userExists = yield user_1.default.findOne({ email });
         if (userExists)
             return res.status(409).json('Este correo ya fue registrado');
-        const user = new user_1.default({ email, password, name, lastname, phone, country, geographicZone, city, address, company });
+        const user = new user_1.default({ email, password, name, lastname, phone, country, geographicZone, city, address, company, state });
         yield user.save();
         return res.status(200).json({ token: createToken(user) });
     }
@@ -45,11 +45,13 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userExists = yield user_1.default.findOne({ email });
         if (!userExists)
-            return res.status(500).json('Usuario incorrecto');
-        const compare = yield userExists.comparePassword(password);
-        if (compare)
+            return res.status(409).json('Usuario incorrecto');
+        if (!userExists.state || userExists.state === 0)
+            return res.status(409).json('Usuario inactivo');
+        const compare = (yield userExists.state) === 1 ? userExists.comparePassword(password) : false;
+        if (yield compare)
             return res.status(200).json({ token: createToken(userExists) });
-        return res.status(500).json('Contraseña incorrecta');
+        return res.status(409).json(userExists.state === 1 ? 'Contraseña incorrecta' : 'Usuario inactivo');
     }
     catch (error) {
         console.error(error);
@@ -58,5 +60,5 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.signIn = signIn;
 const createToken = (user) => {
-    return jsonwebtoken_1.default.sign({ userId: user._id, mailUser: user.email }, config_1.default.jwtSecret, { expiresIn: 86400 });
+    return jsonwebtoken_1.default.sign({ userId: user._id, mailUser: user.email, userState: user.state, userCompany: user.company }, config_1.default.jwtSecret, { expiresIn: 86400 });
 };

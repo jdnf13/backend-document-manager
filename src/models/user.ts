@@ -12,6 +12,7 @@ export interface IUser extends Document {
     city: string,
     address: string,
     company: string,
+    state: number,
     comparePassword: (password: string) => Promise<boolean>
 }
 
@@ -56,7 +57,12 @@ const userSchema = new Schema({
     company: {
         type: String,
         required: true
-    }
+    },
+    state: {
+        type: Number,
+        required: true
+    },
+
 });
 
 userSchema.pre<IUser>('save', async function (next) {

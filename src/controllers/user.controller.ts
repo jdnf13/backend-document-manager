@@ -11,14 +11,14 @@ export const signUp = async (req: Request, res: Response): Promise<Response> => 
         return res.status(400).json({ errors: errors.array() });
 
 
-    const { email, password, name, lastname, phone, country, geographicZone, city, address, company } = req.body;
+    const { email, password, name, lastname, phone, country, geographicZone, city, address, company, state } = req.body;
 
     try {
         const userExists = await User.findOne({ email });
         if (userExists)
             return res.status(409).json('Este correo ya fue registrado')
 
-        const user = new User({ email, password, name, lastname, phone, country, geographicZone, city, address, company });
+        const user = new User({ email, password, name, lastname, phone, country, geographicZone, city, address, company, state });
         await user.save();
 
         return res.status(200).json({ token: createToken(user) });
@@ -38,13 +38,16 @@ export const signIn = async (req: Request, res: Response): Promise<Response> => 
     try {
         const userExists: IUser | null = await User.findOne({ email });
         if (!userExists)
-            return res.status(500).json('Usuario incorrecto');
-        
-        const compare = await userExists.comparePassword(password);
-        if (compare)
+            return res.status(409).json('Usuario incorrecto');
+
+        if (!userExists.state || userExists.state === 0)
+            return res.status(409).json('Usuario inactivo');
+
+        const compare = await userExists.state === 1 ? userExists.comparePassword(password) : false;
+        if (await compare)
             return res.status(200).json({ token: createToken(userExists) })
 
-        return res.status(500).json('Contraseña incorrecta');
+        return res.status(409).json(userExists.state === 1 ? 'Contraseña incorrecta' : 'Usuario inactivo');
 
     } catch (error) {
         console.error(error);
@@ -53,5 +56,5 @@ export const signIn = async (req: Request, res: Response): Promise<Response> => 
 }
 
 const createToken = (user: IUser) => {
-    return jwt.sign({ userId: user._id, mailUser: user.email }, config.jwtSecret, { expiresIn: 86400 });
+    return jwt.sign({ userId: user._id, mailUser: user.email, userState: user.state, userCompany: user.company }, config.jwtSecret, { expiresIn: 86400 });
 }

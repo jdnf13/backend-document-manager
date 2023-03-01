@@ -12,6 +12,8 @@ export const validationNewUser = [
     check('city', 'La ciudad (city) es obligatoria').notEmpty(),
     check('address', 'La dirección (address) es obligatoria').notEmpty(),
     check('company', 'La empresa (company) es obligatoria').notEmpty(),
+    check('state', 'El estado (state) es obligatorio').notEmpty(),
+    check('state', 'El estado (state) debe ser 1: activo, 0: inactivo').isIn([0,1]),
 ];
 
 export const validationLogin = [

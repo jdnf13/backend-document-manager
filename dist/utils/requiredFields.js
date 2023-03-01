@@ -14,6 +14,8 @@ exports.validationNewUser = [
     (0, express_validator_1.check)('city', 'La ciudad (city) es obligatoria').notEmpty(),
     (0, express_validator_1.check)('address', 'La dirección (address) es obligatoria').notEmpty(),
     (0, express_validator_1.check)('company', 'La empresa (company) es obligatoria').notEmpty(),
+    (0, express_validator_1.check)('state', 'El estado (state) es obligatorio').notEmpty(),
+    (0, express_validator_1.check)('state', 'El estado (state) debe ser 1: activo, 0: inactivo').isIn([0, 1]),
 ];
 exports.validationLogin = [
     (0, express_validator_1.check)('email', 'El correo electrónico (email) es obligatorio').notEmpty(),

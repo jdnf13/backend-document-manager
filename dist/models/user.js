@@ -55,7 +55,11 @@ const userSchema = new mongoose_1.Schema({
     company: {
         type: String,
         required: true
-    }
+    },
+    state: {
+        type: Number,
+        required: true
+    },
 });
 userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {

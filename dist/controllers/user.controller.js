@@ -16,6 +16,7 @@ exports.signIn = exports.signUp = void 0;
 const express_validator_1 = require("express-validator");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
+const validateToken_1 = require("../utils/validateToken");
 const config_1 = __importDefault(require("../config/config"));
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
@@ -28,7 +29,7 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(409).json('Este correo ya fue registrado');
         const user = new user_1.default({ email, password, name, lastname, phone, country, geographicZone, city, address, company, state });
         yield user.save();
-        return res.status(200).json({ token: createToken(user) });
+        return res.status(200).json({ token: validateToken_1.token.createToken(user) });
     }
     catch (error) {
         console.error(error);
@@ -50,7 +51,7 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(409).json('Usuario inactivo');
         const compare = (yield userExists.state) === 1 ? userExists.comparePassword(password) : false;
         if (yield compare)
-            return res.status(200).json({ token: createToken(userExists) });
+            return res.status(200).json({ token: validateToken_1.token.createToken(userExists) });
         return res.status(409).json(userExists.state === 1 ? 'Contraseña incorrecta' : 'Usuario inactivo');
     }
     catch (error) {

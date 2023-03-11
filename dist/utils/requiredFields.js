@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validationLogin = exports.validationNewUser = void 0;
+exports.validationCreateDocument = exports.validationLogin = exports.validationNewUser = void 0;
 const express_validator_1 = require("express-validator");
 exports.validationNewUser = [
     (0, express_validator_1.check)('email', 'El correo electrónico (email) es obligatorio').notEmpty(),
@@ -21,4 +21,11 @@ exports.validationLogin = [
     (0, express_validator_1.check)('email', 'El correo electrónico (email) es obligatorio').notEmpty(),
     (0, express_validator_1.check)('email', 'El correo electrónico (email) no es válido').isEmail(),
     (0, express_validator_1.check)('password', 'La contraseña (password) es obligatoria').notEmpty(),
+];
+exports.validationCreateDocument = [
+    (0, express_validator_1.check)('code', 'El codigo (code) es obligatorio').notEmpty(),
+    (0, express_validator_1.check)('name', 'El correo nombre (name) es obligatorio').notEmpty(),
+    (0, express_validator_1.check)('version', 'La versión (version) es obligatoria').notEmpty(),
+    (0, express_validator_1.check)('owner', 'El propietario (owner) es obligatorio').notEmpty(),
+    (0, express_validator_1.check)('state', 'El estado (state) es obligatorio').notEmpty(),
 ];

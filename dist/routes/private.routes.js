@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const document_controller_1 = require("../controllers/document.controller");
+const requiredFields_1 = require("../utils/requiredFields");
 const router = (0, express_1.Router)();
 const passport = require("passport");
 router.get("/ping", passport.authenticate("jwt", { session: false }), document_controller_1.ping);
+router.post('/createDocument', passport.authenticate("jwt", { session: false }), requiredFields_1.validationCreateDocument, document_controller_1.createDocument);
 exports.default = router;

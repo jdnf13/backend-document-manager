@@ -21,3 +21,18 @@ export const validationLogin = [
     check('email', 'El correo electrónico (email) no es válido').isEmail(),
     check('password', 'La contraseña (password) es obligatoria').notEmpty(),
 ];
+
+export const validationCreateDocument = [
+    check('code', 'El codigo (code) es obligatorio').notEmpty(),
+    check('name', 'El correo nombre (name) es obligatorio').notEmpty(),
+    check('version', 'La versión (version) es obligatoria').notEmpty(),
+    check('owner', 'El propietario (owner) es obligatorio').notEmpty(),
+    check('state', 'El estado (state) es obligatorio').notEmpty(),
+];
+
+
+
+
+
+
+

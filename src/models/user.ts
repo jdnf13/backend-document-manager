@@ -13,6 +13,7 @@ export interface IUser extends Document {
     address: string,
     company: string,
     state: number,
+    lastUpdateDate: string,
     comparePassword: (password: string) => Promise<boolean>
 }
 
@@ -62,6 +63,10 @@ const userSchema = new Schema({
         type: Number,
         required: true
     },
+    lastUpdateDate: {
+        type: String,
+        required: true
+    }
 
 });
 

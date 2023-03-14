@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import jwt from "jsonwebtoken";
 
-import User, { IUser } from "../models/user";
-import { token } from "../utils/validateToken";
-import config from "../config/config";
+import User, { IUser } from "../../models/user";
+import { utils } from "../../utils/utils";
+import { token } from "../../utils/validateToken";
 
 export const signUp = async (req: Request, res: Response): Promise<Response> => {
     const errors = validationResult(req);
@@ -19,7 +18,7 @@ export const signUp = async (req: Request, res: Response): Promise<Response> => 
         if (userExists)
             return res.status(409).json('Este correo ya fue registrado')
 
-        const user = new User({ email, password, name, lastname, phone, country, geographicZone, city, address, company, state });
+        const user = new User({ email, password, name, lastname, phone, country, geographicZone, city, address, company, state, lastUpdateDate: utils.dateFormat(new Date) });
         await user.save();
 
         return res.status(200).json({ token: token.createToken(user) });
@@ -54,8 +53,4 @@ export const signIn = async (req: Request, res: Response): Promise<Response> => 
         console.error(error);
         return res.status(500).json('Error interno del servidor 1');
     }
-}
-
-const createToken = (user: IUser) => {
-    return jwt.sign({ userId: user._id, mailUser: user.email, userState: user.state, userCompany: user.company }, config.jwtSecret, { expiresIn: 86400 });
 }

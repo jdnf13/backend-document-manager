@@ -22,6 +22,12 @@ const options = {
 exports.default = new passport_jwt_1.Strategy(options, (payload, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_1.default.findOne(payload.email);
+        const expDate = new Date(0); // crea una nueva fecha en el Epoch Time
+        expDate.setUTCSeconds(payload.exp);
+        console.log(`La fecha de expiración del token es: ${expDate.toLocaleString()}`);
+        if (payload.exp < new Date().getTime() / 1000) {
+            return done(null, false);
+        }
         if (user && user.state && user.state === 1)
             return done(null, user);
         return done(null, false);
